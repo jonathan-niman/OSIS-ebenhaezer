@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OSIS Ebenhaezer — SMAK3 Bina Bakti</title>
+  <meta name="description" content="Website resmi OSIS SMAK3 Bina Bakti Ebenhaezer, Bandung."/>
+  <meta property="og:title" content="OSIS Ebenhaezer"/>
+  <meta property="og:description" content="Website resmi OSIS SMAK3 Bina Bakti Ebenhaezer, Bandung."/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ============================================================
+       VARIABLES
+    ============================================================ */
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f5f5f0;
+      --gray:   #888880;
+      --border: rgba(245,245,240,0.12);
+      --font-display: 'Playfair Display', serif;
+      --font-body:    'DM Sans', sans-serif;
+    }
+
+    /* ============================================================
+       RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* noise */
+    body::before {
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:999;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size:200px; opacity:.35;
+    }
+
+    /* ============================================================
+       PAGE LOADER
+    ============================================================ */
+    #loader {
+      position:fixed; inset:0; z-index:9000; background:var(--black);
+      display:flex; align-items:center; justify-content:center;
+      transition: opacity .8s, visibility .8s;
+    }
+    #loader.done { opacity:0; visibility:hidden; }
+    .loader-word {
+      font-family:var(--font-display);
+      font-size:clamp(28px,6vw,72px);
+      font-weight:900; letter-spacing:-.02em; overflow:hidden;
+    }
+    .loader-word span {
+      display:inline-block;
+      animation: loaderUp .7s cubic-bezier(.16,1,.3,1) both;
+    }
+    @keyframes loaderUp {
+      from { transform:translateY(100%); opacity:0; }
+      to   { transform:translateY(0); opacity:1; }
+    }
+
+    /* ============================================================
+       SCROLL REVEAL
+    ============================================================ */
+    .reveal {
+      opacity:0; transform:translateY(32px);
+      transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1);
+    }
+    .reveal.visible { opacity:1; transform:none; }
+    .d1{transition-delay:.08s} .d2{transition-delay:.16s}
+    .d3{transition-delay:.24s} .d4{transition-delay:.32s}
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    nav {
+      position:fixed; top:0; width:100%; z-index:500;
+      padding:22px 48px;
+      display:flex; align-items:center; justify-content:space-between;
+      transition: background .4s, border-color .4s, padding .4s;
+      border-bottom:1px solid transparent;
+    }
+    nav.scrolled {
+      background:rgba(10,10,10,.92);
+      backdrop-filter:blur(14px);
+      border-color:var(--border);
+      padding:14px 48px;
+    }
+    .nav-logo { display:flex; align-items:center; gap:12px; }
+    /* ── GANTI src logo navbar ── */
+    .nav-logo img { width:32px; height:32px; object-fit:contain; filter:brightness(0) invert(1); }
+    .nav-logo span { font-family:var(--font-display); font-size:.92rem; letter-spacing:.1em; text-transform:uppercase; }
+    .nav-links { display:flex; gap:36px; list-style:none; }
+    .nav-links a {
+      font-size:.73rem; letter-spacing:.15em; text-transform:uppercase;
+      color:var(--gray); transition:color .3s; position:relative;
+    }
+    .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:var(--white); transition:width .3s; }
+    .nav-links a:hover { color:var(--white); }
+    .nav-links a:hover::after { width:100%; }
+    .hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; padding:4px; cursor:pointer; }
+    .hamburger span { display:block; width:24px; height:1px; background:var(--white); transition:.3s; }
+    .hamburger.open span:nth-child(1){ transform:rotate(45deg) translate(4px,4px); }
+    .hamburger.open span:nth-child(2){ opacity:0; }
+    .hamburger.open span:nth-child(3){ transform:rotate(-45deg) translate(4px,-4px); }
+    .mobile-menu { display:none; position:fixed; inset:0; background:var(--black); z-index:490; flex-direction:column; align-items:center; justify-content:center; gap:36px; }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a { font-family:var(--font-display); font-size:2.2rem; color:var(--gray); transition:color .3s; }
+    .mobile-menu a:hover { color:var(--white); }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    #home {
+      min-height:100vh;
+      display:flex; flex-direction:column; justify-content:flex-end;
+      padding:0 48px 80px; position:relative; overflow:hidden;
+    }
+    .hero-bg {
+      position:absolute; inset:0;
+      /* ── GANTI URL ini dengan foto kegiatan OSIS sebagai hero background ── */
+      /* ── GANTI dengan foto kegiatan OSIS: background-image:url('images/hero.jpg'); ── */
+      filter:brightness(.12) grayscale(1);
+      animation:heroZoom 8s ease forwards;
+    }
+    @keyframes heroZoom { from{transform:scale(1.06)} to{transform:scale(1)} }
+    .hero-overlay { position:absolute; inset:0; background:linear-gradient(to top, var(--black) 30%, transparent 70%); }
+    .hero-content { position:relative; z-index:2; }
+    .hero-eyebrow { font-size:.7rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gray); margin-bottom:16px; }
+    .hero-title { font-family:var(--font-display); font-size:clamp(52px,9vw,128px); font-weight:900; line-height:.93; letter-spacing:-.02em; }
+    .hero-title em { font-style:italic; color:var(--gray); }
+    .hero-sub { margin-top:24px; max-width:400px; font-size:.98rem; color:var(--gray); line-height:1.7; }
+    .hero-cta { margin-top:38px; display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+    .btn-primary { padding:13px 30px; background:var(--white); color:var(--black); font-size:.76rem; letter-spacing:.15em; text-transform:uppercase; border:none; cursor:pointer; transition:background .3s, transform .2s; }
+    .btn-primary:hover { background:#d8d8d4; transform:translateY(-2px); }
+    .btn-ghost { font-size:.76rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gray); border-bottom:1px solid var(--border); padding-bottom:3px; transition:color .3s, border-color .3s; }
+    .btn-ghost:hover { color:var(--white); border-color:var(--white); }
+    .hero-stats { position:absolute; right:48px; top:50%; transform:translateY(-50%); z-index:2; display:flex; flex-direction:column; gap:28px; }
+    .stat-item { text-align:right; }
+    .stat-num { font-family:var(--font-display); font-size:1.9rem; font-weight:700; }
+    .stat-label { font-size:.66rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gray); }
+    .scroll-ind { position:absolute; right:48px; bottom:80px; z-index:2; display:flex; flex-direction:column; align-items:center; gap:10px; }
+    .scroll-ind span { writing-mode:vertical-rl; font-size:.66rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gray); }
+    .scroll-line { width:1px; height:56px; background:var(--border); overflow:hidden; position:relative; }
+    .scroll-line::after { content:''; position:absolute; top:-100%; left:0; width:1px; height:100%; background:var(--white); animation:scrollAnim 1.8s ease-in-out infinite; }
+    @keyframes scrollAnim { to{top:100%} }
+
+    /* ============================================================
+       SECTION BASE
+    ============================================================ */
+    section { padding:110px 48px; }
+    .section-tag { font-size:.66rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gray); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+    .section-tag::before { content:''; display:inline-block; width:26px; height:1px; background:var(--gray); }
+    .section-title { font-family:var(--font-display); font-size:clamp(34px,5vw,70px); font-weight:900; line-height:1.05; letter-spacing:-.02em; }
+    .section-title em { font-style:italic; color:var(--gray); }
+    .divider { border:none; border-top:1px solid var(--border); margin:0 48px; }
+
+    /* PERIOD TABS */
+    .period-tabs { display:flex; border:1px solid var(--border); width:fit-content; }
+    .ptab { padding:9px 22px; font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; background:none; border:none; color:var(--gray); cursor:pointer; transition:background .25s, color .25s; }
+    .ptab.active { background:var(--white); color:var(--black); }
+    .ptab:not(.active):hover { color:var(--white); }
+    .period-panel { display:none; }
+    .period-panel.active { display:block; }
+    .dept-label { font-size:.66rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gray); margin:36px 0 14px; display:flex; align-items:center; gap:10px; }
+    .dept-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* ============================================================
+       ABOUT
+    ============================================================ */
+    .about-wrap { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+    .about-left .lead { font-size:clamp(15px,1.5vw,20px); line-height:1.7; color:var(--gray); margin-top:26px; max-width:440px; }
+    .about-right { padding-top:72px; }
+    .vm-block { margin-bottom:38px; }
+    .vm-label { font-size:.66rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gray); margin-bottom:12px; }
+    .vm-text { font-family:var(--font-display); font-size:clamp(13px,1.15vw,16px); line-height:1.65; font-weight:400; }
+    .mission-list { list-style:none; margin-top:14px; display:flex; flex-direction:column; gap:9px; }
+    .mission-list li { display:flex; align-items:flex-start; gap:12px; padding:13px; border:1px solid var(--border); font-size:.86rem; color:var(--gray); line-height:1.5; transition:border-color .3s, color .3s; }
+    .mission-list li:hover { border-color:rgba(245,245,240,.3); color:var(--white); }
+    .mission-list li .num { font-family:var(--font-display); font-size:1rem; color:rgba(245,245,240,.18); flex-shrink:0; }
+
+    /* ============================================================
+       MEMBERS — GRID CARDS
+    ============================================================ */
+    #members { padding-bottom:60px; }
+    .members-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:52px; flex-wrap:wrap; gap:20px; }
+
+    .members-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(190px,1fr));
+      gap:2px;
+    }
+
+    /* member card */
+    .member-card {
+      position:relative; overflow:hidden;
+      aspect-ratio:3/4; background:#111; cursor:default;
+    }
+    /* ── FOTO: ganti src di tag <img class="member-photo"> ── */
+    .member-photo {
+      width:100%; height:100%; object-fit:cover;
+      filter:grayscale(1) brightness(.8);
+      transition:filter .5s, transform .5s;
+    }
+    .member-card:hover .member-photo { filter:grayscale(.2) brightness(.95); transform:scale(1.04); }
+    .member-info {
+      position:absolute; bottom:0; left:0; right:0;
+      padding:22px 18px 18px;
+      background:linear-gradient(to top, rgba(10,10,10,.96) 55%, transparent);
+      transform:translateY(6px); transition:transform .4s cubic-bezier(.16,1,.3,1);
+    }
+    .member-card:hover .member-info { transform:translateY(0); }
+    .member-name { font-family:var(--font-display); font-size:1rem; font-weight:700; line-height:1.2; }
+    .member-role { font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gray); margin-top:4px; }
+
+    /* dept block label — pisah tiap kelompok */
+    .dept-block { margin-top:52px; }
+    .dept-block-label {
+      font-size:.66rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gray);
+      margin-bottom:14px; display:flex; align-items:center; gap:12px;
+      padding:10px 16px; border:1px solid var(--border); width:fit-content;
+    }
+    .dept-block-label::before { content:''; display:inline-block; width:20px; height:1px; background:var(--gray); }
+
+    /* divisi sub-label dalam dept block */
+    .divisi-label {
+      font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gray);
+      margin:24px 0 10px; display:flex; align-items:center; gap:10px;
+    }
+    .divisi-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* ============================================================
+       PROKER / EVENTS  — with modal gallery
+    ============================================================ */
+    #events { padding-bottom:60px; }
+    .events-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:48px; flex-wrap:wrap; gap:20px; }
+    .events-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:2px; }
+
+    .event-card {
+      position:relative; overflow:hidden; cursor:pointer;
+      border:1px solid var(--border); transition:border-color .4s;
+      background:#0e0e0e;
+    }
+    .event-card:hover { border-color:rgba(245,245,240,.3); }
+
+    /* background foto event — default hitam, nanti diganti pake CSS var */
+    .event-bg {
+      position:absolute; inset:0;
+      background-size:cover; background-position:center;
+      filter:grayscale(1) brightness(.18);
+      transition:filter .5s, transform .6s;
+    }
+    .event-card:hover .event-bg { filter:grayscale(.5) brightness(.28); transform:scale(1.04); }
+
+    .event-body { position:relative; z-index:1; padding:32px 28px; }
+    .event-num { font-family:var(--font-display); font-size:3.5rem; font-weight:900; color:rgba(245,245,240,.07); line-height:1; margin-bottom:12px; }
+    .event-title { font-family:var(--font-display); font-size:1.2rem; font-weight:700; margin-bottom:10px; line-height:1.3; }
+    .event-desc { font-size:.84rem; color:var(--gray); line-height:1.6; }
+    .event-badge { display:inline-block; margin-top:18px; padding:4px 12px; border:1px solid var(--border); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gray); }
+    .event-cta { margin-top:20px; font-size:.68rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(245,245,240,.4); display:flex; align-items:center; gap:8px; transition:color .3s; }
+    .event-card:hover .event-cta { color:var(--white); }
+    .event-cta::before { content:''; display:inline-block; width:16px; height:1px; background:currentColor; }
+
+    /* ============================================================
+       EVENT MODAL (popup gallery foto per event)
+    ============================================================ */
+    #event-modal {
+      display:none; position:fixed; inset:0; z-index:850;
+      background:rgba(0,0,0,.95); overflow-y:auto;
+      padding:60px 48px;
+    }
+    #event-modal.open { display:block; }
+    .modal-inner { max-width:900px; margin:0 auto; }
+    .modal-close {
+      position:fixed; top:24px; right:32px;
+      font-size:1.8rem; color:var(--white); cursor:pointer;
+      background:none; border:none; line-height:1; z-index:860;
+    }
+    .modal-tag { font-size:.66rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gray); margin-bottom:12px; }
+    .modal-title { font-family:var(--font-display); font-size:clamp(28px,4vw,56px); font-weight:900; line-height:1.05; margin-bottom:16px; }
+    .modal-desc { font-size:.92rem; color:var(--gray); line-height:1.7; margin-bottom:40px; max-width:560px; }
+    .modal-photos {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:3px;
+    }
+    .modal-photo {
+      aspect-ratio:4/3; overflow:hidden; cursor:pointer; position:relative;
+    }
+    /* ── GANTI src foto di dalam .modal-photo > img ── */
+    .modal-photo img {
+      width:100%; height:100%; object-fit:cover;
+      filter:grayscale(1) brightness(.8);
+      transition:filter .4s, transform .4s;
+    }
+    .modal-photo:hover img { filter:grayscale(.3) brightness(1); transform:scale(1.04); }
+    /* placeholder foto di modal */
+    .modal-photo-placeholder {
+      aspect-ratio:4/3; background:#111;
+      border:1px solid var(--border);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      color:var(--gray); text-align:center; padding:16px; gap:8px;
+    }
+    .modal-photo-placeholder .ph-icon { font-size:1.8rem; opacity:.3; }
+    .modal-photo-placeholder span { font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; }
+
+    /* ============================================================
+       GALLERY
+    ============================================================ */
+    #gallery { padding-bottom:60px; }
+    .gallery-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:48px; flex-wrap:wrap; gap:20px; }
+    .gallery-grid { columns:3; column-gap:2px; }
+    .gallery-item { break-inside:avoid; margin-bottom:2px; overflow:hidden; position:relative; cursor:pointer; }
+    .gallery-img { width:100%; display:block; filter:grayscale(1) brightness(.75); transition:filter .5s, transform .5s; }
+    .gallery-item:hover .gallery-img { filter:grayscale(.3) brightness(1); transform:scale(1.03); }
+    .gallery-overlay { position:absolute; inset:0; background:rgba(10,10,10,.45); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .4s; }
+    .gallery-item:hover .gallery-overlay { opacity:1; }
+    .gallery-icon { font-size:1.4rem; color:var(--white); }
+    .gallery-placeholder { aspect-ratio:4/3; background:#111; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--gray); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; text-align:center; padding:20px; }
+
+    /* LIGHTBOX */
+    #lightbox { display:none; position:fixed; inset:0; z-index:900; background:rgba(0,0,0,.97); align-items:center; justify-content:center; }
+    #lightbox.open { display:flex; }
+    #lightbox img { max-width:90vw; max-height:90vh; object-fit:contain; }
+    #lightbox-close { position:absolute; top:24px; right:32px; font-size:1.8rem; color:var(--white); cursor:pointer; background:none; border:none; }
+
+    /* ============================================================
+       CONTACT
+    ============================================================ */
+    #contact { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+    .contact-big { font-family:var(--font-display); font-size:clamp(44px,6vw,92px); font-weight:900; line-height:.95; letter-spacing:-.02em; margin-top:18px; }
+    .contact-big em { font-style:italic; color:var(--gray); }
+    .contact-right { padding-top:72px; }
+    .contact-address { font-size:.9rem; color:var(--gray); line-height:1.85; border-left:1px solid var(--border); padding-left:24px; margin-bottom:44px; }
+    .social-links { display:flex; flex-direction:column; }
+    .social-link { display:flex; align-items:center; justify-content:space-between; padding:18px 0; border-bottom:1px solid var(--border); color:var(--gray); transition:color .3s, padding-left .3s; }
+    .social-link:hover { color:var(--white); padding-left:10px; }
+    .social-platform { font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; }
+    .social-handle { font-family:var(--font-display); font-size:1rem; }
+    .social-arrow { font-size:1.1rem; transition:transform .3s; }
+    .social-link:hover .social-arrow { transform:translate(3px,-3px); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer { padding:36px 48px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; }
+    .footer-logo { font-family:var(--font-display); font-size:.9rem; letter-spacing:.05em; }
+    .footer-copy { font-size:.73rem; color:var(--gray); }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media(max-width:900px){
+      nav { padding:18px 24px; }
+      nav.scrolled { padding:12px 24px; }
+      .nav-links { display:none; }
+      .hamburger { display:flex; }
+      #home { padding:0 24px 72px; }
+      .hero-stats { display:none; }
+      .scroll-ind { right:24px; }
+      section { padding:80px 24px; }
+      .divider { margin:0 24px; }
+      .about-wrap { grid-template-columns:1fr; gap:40px; }
+      .about-right { padding-top:0; }
+      #contact { grid-template-columns:1fr; gap:40px; }
+      .contact-right { padding-top:0; }
+      .gallery-grid { columns:2; }
+      .modal-photos { grid-template-columns:repeat(2,1fr); }
+      #event-modal { padding:60px 24px; }
+      footer { padding:28px 24px; }
+    }
+    @media(max-width:580px){
+      .gallery-grid { columns:1; }
+      .modal-photos { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="loader">
+  <div class="loader-word">
+    <span style="animation-delay:.1s">E</span><span style="animation-delay:.15s">B</span><span style="animation-delay:.2s">E</span><span style="animation-delay:.25s">N</span><span style="animation-delay:.3s">H</span><span style="animation-delay:.35s">A</span><span style="animation-delay:.4s">E</span><span style="animation-delay:.45s">Z</span><span style="animation-delay:.5s">E</span><span style="animation-delay:.55s">R</span>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <img src="https://web-osis-ebenhaezer.vercel.app/css/logo-osis.png" alt="Logo OSIS"/>
+    <span>OSIS Ebenhaezer</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">Visi &amp; Misi</a></li>
+    <li><a href="#members">Pengurus</a></li>
+    <li><a href="#events">Proker</a></li>
+    <li><a href="#gallery">Galeri</a></li>
+    <li><a href="#contact">Kontak</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home"    onclick="closeMobile()">Home</a>
+  <a href="#about"   onclick="closeMobile()">Visi &amp; Misi</a>
+  <a href="#members" onclick="closeMobile()">Pengurus</a>
+  <a href="#events"  onclick="closeMobile()">Proker</a>
+  <a href="#gallery" onclick="closeMobile()">Galeri</a>
+  <a href="#contact" onclick="closeMobile()">Kontak</a>
+</div>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-stats">
+    <div class="stat-item reveal d1"><div class="stat-num">2025</div><div class="stat-label">Periode</div></div>
+    <div class="stat-item reveal d2"><div class="stat-num">25</div><div class="stat-label">Member</div></div>
+    <div class="stat-item reveal d3"><div class="stat-num">10</div><div class="stat-label">Proker</div></div>
+  </div>
+  <div class="hero-content">
+    <p class="hero-eyebrow reveal">SMAK3 Bina Bakti Bandung — Organisasi Siswa Intra Sekolah</p>
+    <h1 class="hero-title reveal d1">OSIS<br/><em>Ebenhaezer</em></h1>
+    <p class="hero-sub reveal d2">Wadah siswa-siswi SMAK3 Bina Bakti untuk tumbuh aktif, kreatif, dan inovatif — selaras dengan nilai SMART.</p>
+    <div class="hero-cta reveal d3">
+      <a href="#members" class="btn-primary">Kenali Kami</a>
+      <a href="#about" class="btn-ghost">Visi &amp; Misi →</a>
+    </div>
+  </div>
+  <div class="scroll-ind"><div class="scroll-line"></div><span>Scroll</span></div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ============================================================
+     VISI & MISI
+============================================================ -->
+<section id="about">
+  <div class="about-wrap">
+    <div class="about-left">
+      <p class="section-tag reveal">Tentang Kami</p>
+      <h2 class="section-title reveal d1">Bukan Sekadar<br/><em>Organisasi.</em></h2>
+      <p class="lead reveal d2">OSIS Ebenhaezer adalah ruang bagi siswa untuk tumbuh — sebagai pemimpin, sebagai pelayan, dan sebagai pribadi yang berkarakter sesuai nilai SMART.</p>
+    </div>
+    <div class="about-right">
+      <div class="period-tabs reveal" style="margin-bottom:28px;">
+        <button class="ptab active" onclick="switchTab('about','2526',this)">2025–2026</button>
+        <button class="ptab"        onclick="switchTab('about','2425',this)">2024–2025</button>
+      </div>
+
+      <!-- 2025-2026 -->
+      <div class="period-panel active" id="about-2526">
+        <div class="vm-block reveal">
+          <p class="vm-label">Visi</p>
+          <p class="vm-text">"Mewujudkan OSIS sebagai organisasi yang aktif, kreatif, inovatif untuk menjadi wadah pengembangan potensi bagi siswa-siswi SMAK3 Bina Bakti dan menciptakan lingkungan yang selaras dengan nilai SMART bagi siswa-siswi SMAK3 Bina Bakti."</p>
+        </div>
+        <div class="vm-block reveal d2">
+          <p class="vm-label">Misi</p>
+          <ul class="mission-list">
+            <li><span class="num">01</span>Menjadikan OSIS sebagai teladan dalam sikap religius, kreatif, dan menghargai perbedaan</li>
+            <li><span class="num">02</span>Mendorong dan memfasilitasi siswa untuk mengembangkan bakat dan minat secara inovatif</li>
+            <li><span class="num">03</span>Menumbuhkan kesadaran siswa terhadap pentingnya menjaga lingkungan sekolah agar terciptanya lingkungan yang bersih dan asri</li>
+            <li><span class="num">04</span>Mengadakan kegiatan sosial untuk menumbuhkan kepedulian terhadap sesama</li>
+            <li><span class="num">05</span>Menumbuhkan sikap sopan santun antar siswa sebagai budaya sekolah</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 2024-2025 -->
+      <div class="period-panel" id="about-2425">
+        <div class="vm-block reveal">
+          <p class="vm-label">Visi</p>
+          <p class="vm-text">"Mewujudkan OSIS sebagai wadah bagi siswa-siswi untuk mengembangkan potensi diri sebagai individu yang melayani, aktif, dan bertanggung jawab, serta menjadi teladan dalam bersikap dengan menginterpretasikan nilai SMART dalam menjalankan tugas."</p>
+        </div>
+        <div class="vm-block reveal d2">
+          <p class="vm-label">Misi — FUSION</p>
+          <ul class="mission-list">
+            <li><span class="num">F</span>Fellowship — Membangun solidaritas antar anggota</li>
+            <li><span class="num">U</span>Unity — Menjaga kesatuan dalam keberagaman</li>
+            <li><span class="num">S</span>Skills — Mengembangkan kompetensi dan keahlian</li>
+            <li><span class="num">I</span>Impact — Memberikan dampak nyata bagi sekolah</li>
+            <li><span class="num">O</span>Organization — Membangun kerja tim yang solid</li>
+            <li><span class="num">N</span>Nurturing — Membentuk karakter yang kuat</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ============================================================
+     MEMBERS — ORG CHART
+============================================================ -->
+<section id="members">
+  <div class="members-header">
+    <div>
+      <p class="section-tag reveal">Struktur Organisasi</p>
+      <h2 class="section-title reveal d1">Our<br/><em>Members.</em></h2>
+    </div>
+    <div class="period-tabs reveal">
+      <button class="ptab active" onclick="switchTab('members','2526',this)">2025–2026</button>
+      <button class="ptab"        onclick="switchTab('members','2425',this)">2024–2025</button>
+    </div>
+  </div>
+
+  <!-- ====== PERIODE 2025-2026 ====== -->
+  <div class="period-panel active" id="members-2526">
+
+    <!-- PEMBINA & PENGURUS INTI -->
+    <div class="dept-block-label reveal">Pembina &amp; Pengurus Inti</div>
+    <div class="members-grid">
+      <div class="member-card reveal">
+        <!-- ── GANTI src foto Pembina ── -->
+        <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/css/pembina.jpeg" alt="Pembina"/>
+        <div class="member-info"><div class="member-name">Fellia Lathasa Aufa, S.Pd</div><div class="member-role">Pembina OSIS</div></div>
+      </div>
+      <div class="member-card reveal d1">
+        <!-- ── GANTI src foto Greace ── -->
+        <img class="member-photo" src="images/2526/greace.jpg" alt="Ketua OSIS"/>
+        <div class="member-info"><div class="member-name">Greace Amelia Agustine</div><div class="member-role">Ketua OSIS</div></div>
+      </div>
+      <div class="member-card reveal d2">
+        <!-- ── GANTI src foto Michaela ── -->
+        <img class="member-photo" src="images/2526/michaela.jpg" alt="Wakil Ketua"/>
+        <div class="member-info"><div class="member-name">Michaela Kathryn C.</div><div class="member-role">Wakil Ketua OSIS</div></div>
+      </div>
+      <div class="member-card reveal d3">
+        <!-- ── GANTI src foto Vanessa ── -->
+        <img class="member-photo" src="images/2526/vanessa.jpg" alt="Sekretaris"/>
+        <div class="member-info"><div class="member-name">Vanessa Chrisandra</div><div class="member-role">Sekretaris</div></div>
+      </div>
+      <div class="member-card reveal d4">
+        <!-- ── GANTI src foto Felicia ── -->
+        <img class="member-photo" src="images/2526/felicia.jpg" alt="Bendahara"/>
+        <div class="member-info"><div class="member-name">Felicia Levnina</div><div class="member-role">Bendahara</div></div>
+      </div>
+    </div>
+
+    <!-- DEPT DPD -->
+    <div class="dept-block">
+      <div class="dept-block-label reveal">Departemen Pengembangan Diri (DPD)</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <!-- ── GANTI src foto Renaldy ── -->
+          <img class="member-photo" src="images/2526/renaldy.jpg" alt="Ketua DPD"/>
+          <div class="member-info"><div class="member-name">Renaldy Irlen</div><div class="member-role">Ketua Departemen DPD</div></div>
+        </div>
+      </div>
+
+      <div class="divisi-label reveal">Divisi Spirituality</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="images/2526/giselle.jpg" alt="Ketua Spirituality"/>
+          <div class="member-info"><div class="member-name">Giselle Angelica</div><div class="member-role">Ketua Divisi Spirituality</div></div>
+        </div>
+        <div class="member-card reveal d1">
+          <img class="member-photo" src="images/2526/marvello.jpg" alt="Anggota Spirituality"/>
+          <div class="member-info"><div class="member-name">Marvello Reynard</div><div class="member-role">Anggota — Spirituality</div></div>
+        </div>
+        <div class="member-card reveal d2">
+          <img class="member-photo" src="images/2526/nicholas.jpg" alt="Anggota Spirituality"/>
+          <div class="member-info"><div class="member-name">Nicholas Peter</div><div class="member-role">Anggota — Spirituality</div></div>
+        </div>
+      </div>
+
+      <div class="divisi-label reveal">Divisi Art &amp; Sport</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="images/2526/gibson.jpg" alt="Ketua Art & Sport"/>
+          <div class="member-info"><div class="member-name">Gibson Trevorus</div><div class="member-role">Ketua Divisi Art &amp; Sport</div></div>
+        </div>
+        <div class="member-card reveal d1">
+          <img class="member-photo" src="images/2526/malvin.jpg" alt="Anggota Art & Sport"/>
+          <div class="member-info"><div class="member-name">Malvin Herawan</div><div class="member-role">Anggota — Art &amp; Sport</div></div>
+        </div>
+        <div class="member-card reveal d2">
+          <img class="member-photo" src="images/2526/sergio.jpg" alt="Anggota Art & Sport"/>
+          <div class="member-info"><div class="member-name">Sergio Reysevo</div><div class="member-role">Anggota — Art &amp; Sport</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPT KOMINFO -->
+    <div class="dept-block">
+      <div class="dept-block-label reveal">Departemen Komunikasi &amp; Informasi (Kominfo)</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="images/2526/dave.jpg" alt="Ketua Kominfo"/>
+          <div class="member-info"><div class="member-name">Dave Reynaldi</div><div class="member-role">Ketua Departemen Kominfo</div></div>
+        </div>
+      </div>
+
+      <div class="divisi-label reveal">Divisi Blitz</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="images/2526/jonathan.jpg" alt="Ketua Blitz"/>
+          <div class="member-info"><div class="member-name">Jonathan Aninditho</div><div class="member-role">Ketua Divisi Blitz</div></div>
+        </div>
+        <div class="member-card reveal d1">
+          <img class="member-photo" src="images/2526/graciella.jpg" alt="Anggota Blitz"/>
+          <div class="member-info"><div class="member-name">Graciella Tiffany</div><div class="member-role">Anggota — Blitz</div></div>
+        </div>
+        <div class="member-card reveal d2">
+          <img class="member-photo" src="images/2526/wylvin.jpg" alt="Anggota Blitz"/>
+          <div class="member-info"><div class="member-name">Wylvin Herliana</div><div class="member-role">Anggota — Blitz</div></div>
+        </div>
+      </div>
+
+      <div class="divisi-label reveal">Divisi Humas</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="images/2526/gabriella.jpg" alt="Ketua Humas"/>
+          <div class="member-info"><div class="member-name">Gabriella Jesslyn</div><div class="member-role">Ketua Divisi Humas</div></div>
+        </div>
+        <div class="member-card reveal d1">
+          <img class="member-photo" src="images/2526/cynthiara.jpg" alt="Anggota Humas"/>
+          <div class="member-info"><div class="member-name">Cynthiara Josephina</div><div class="member-role">Anggota — Humas</div></div>
+        </div>
+        <div class="member-card reveal d2">
+          <img class="member-photo" src="images/2526/cassandra.jpg" alt="Anggota Humas"/>
+          <div class="member-info"><div class="member-name">Cassandra Yulita</div><div class="member-role">Anggota — Humas</div></div>
+        </div>
+      </div>
+
+      <div class="divisi-label reveal">Divisi Creativity</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="images/2526/avelyn.jpg" alt="Ketua Creativity"/>
+          <div class="member-info"><div class="member-name">Avelyn Anjelita</div><div class="member-role">Ketua Divisi Creativity</div></div>
+        </div>
+        <div class="member-card reveal d1">
+          <img class="member-photo" src="images/2526/faithlyne.jpg" alt="Anggota Creativity"/>
+          <div class="member-info"><div class="member-name">Faithlyne Zevischa</div><div class="member-role">Anggota — Creativity</div></div>
+        </div>
+        <div class="member-card reveal d2">
+          <img class="member-photo" src="images/2526/vellycia.jpg" alt="Anggota Creativity"/>
+          <div class="member-info"><div class="member-name">Vellycia Sandiorisa</div><div class="member-role">Anggota — Creativity</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panel 2526 -->
+
+  <!-- ====== PERIODE 2024-2025 ====== -->
+  <div class="period-panel" id="members-2425">
+
+    <div class="dept-block-label reveal">Pembina &amp; Pengurus Inti</div>
+    <div class="members-grid">
+      <div class="member-card reveal">
+        <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/css/pembina.jpeg" alt="Pembina"/>
+        <div class="member-info"><div class="member-name">Irwan Haryadi S., S.Pd</div><div class="member-role">Pembina OSIS</div></div>
+      </div>
+      <div class="member-card reveal d1">
+        <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/1732109645027.png" alt="Ketua"/>
+        <div class="member-info"><div class="member-name">Kayleen Ashleigh</div><div class="member-role">Ketua OSIS</div></div>
+      </div>
+      <div class="member-card reveal d2">
+        <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/1732108152513.png" alt="Wakil Ketua"/>
+        <div class="member-info"><div class="member-name">Kireina Hana</div><div class="member-role">Wakil Ketua OSIS</div></div>
+      </div>
+      <div class="member-card reveal d3">
+        <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Sekretaris.png" alt="Sekretaris"/>
+        <div class="member-info"><div class="member-name">Jorianne Abigail</div><div class="member-role">Sekretaris</div></div>
+      </div>
+      <div class="member-card reveal d4">
+        <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Bendahara.png" alt="Bendahara"/>
+        <div class="member-info"><div class="member-name">Agnes Natali</div><div class="member-role">Bendahara</div></div>
+      </div>
+    </div>
+
+    <div class="dept-block">
+      <div class="dept-block-label reveal">Departemen Pengembangan Diri (DPD)</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Ketua-DPD.png" alt="Ketua DPD"/>
+          <div class="member-info"><div class="member-name">Loula Stefanny</div><div class="member-role">Ketua Departemen DPD</div></div>
+        </div>
+      </div>
+      <div class="divisi-label reveal">Divisi Spiritual</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Ketua-spiritual.png" alt="Ketua Spiritual"/>
+          <div class="member-info"><div class="member-name">Cecilya Paramita</div><div class="member-role">Ketua Divisi Spiritual</div></div>
+        </div>
+        <div class="member-card reveal d1">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-spiritual-1.png" alt="Anggota Spiritual"/>
+          <div class="member-info"><div class="member-name">Christopher Alexander</div><div class="member-role">Anggota — Spiritual</div></div>
+        </div>
+        <div class="member-card reveal d2">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-Spiritual-2.png" alt="Anggota Spiritual"/>
+          <div class="member-info"><div class="member-name">Giselle Angelica</div><div class="member-role">Anggota — Spiritual</div></div>
+        </div>
+      </div>
+      <div class="divisi-label reveal">Divisi Sport</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Ketua-sport.png" alt="Ketua Sport"/>
+          <div class="member-info"><div class="member-name">Steven Gerrard</div><div class="member-role">Ketua Divisi Sport</div></div>
+        </div>
+        <div class="member-card reveal d1">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-sport-1.png" alt="Anggota Sport"/>
+          <div class="member-info"><div class="member-name">Gibson Trevorus</div><div class="member-role">Anggota — Sport</div></div>
+        </div>
+        <div class="member-card reveal d2">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-sport-2.png" alt="Anggota Sport"/>
+          <div class="member-info"><div class="member-name">Renaldy Irlen</div><div class="member-role">Anggota — Sport</div></div>
+        </div>
+      </div>
+      <div class="divisi-label reveal">Divisi Creativity</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Ketua-creativity.png" alt="Ketua Creativity"/>
+          <div class="member-info"><div class="member-name">Michelle Janett</div><div class="member-role">Ketua Divisi Creativity</div></div>
+        </div>
+        <div class="member-card reveal d1">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-kreatif-1.png" alt="Anggota Creativity"/>
+          <div class="member-info"><div class="member-name">Gabriella Jesslyn</div><div class="member-role">Anggota — Creativity</div></div>
+        </div>
+        <div class="member-card reveal d2">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-kreatif-2.png" alt="Anggota Creativity"/>
+          <div class="member-info"><div class="member-name">Aveline Anielita</div><div class="member-role">Anggota — Creativity</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dept-block">
+      <div class="dept-block-label reveal">Departemen Komunikasi &amp; Informasi (Kominfo)</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Departemen Kominfo.png" alt="Ketua Kominfo"/>
+          <div class="member-info"><div class="member-name">Jeyssen Nathanie</div><div class="member-role">Ketua Departemen Kominfo</div></div>
+        </div>
+      </div>
+      <div class="divisi-label reveal">Divisi Blitz</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Ketua-blitz.png" alt="Ketua Blitz"/>
+          <div class="member-info"><div class="member-name">Michael Christian</div><div class="member-role">Ketua Divisi Blitz</div></div>
+        </div>
+        <div class="member-card reveal d1">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-blitz-1.png" alt="Anggota Blitz"/>
+          <div class="member-info"><div class="member-name">Alexa Leona</div><div class="member-role">Anggota — Blitz</div></div>
+        </div>
+        <div class="member-card reveal d2">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-blitz-2.png" alt="Anggota Blitz"/>
+          <div class="member-info"><div class="member-name">Malvin Herawan</div><div class="member-role">Anggota — Blitz</div></div>
+        </div>
+      </div>
+      <div class="divisi-label reveal">Divisi Humas</div>
+      <div class="members-grid">
+        <div class="member-card reveal">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Ketua-Humas.png" alt="Ketua Humas"/>
+          <div class="member-info"><div class="member-name">Chealsy Caroline</div><div class="member-role">Ketua Divisi Humas</div></div>
+        </div>
+        <div class="member-card reveal d1">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-humas-1.png" alt="Anggota Humas"/>
+          <div class="member-info"><div class="member-name">Dave Renaldy</div><div class="member-role">Anggota — Humas</div></div>
+        </div>
+        <div class="member-card reveal d2">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-humas-2.png" alt="Anggota Humas"/>
+          <div class="member-info"><div class="member-name">Mychaela Kathryn</div><div class="member-role">Anggota — Humas</div></div>
+        </div>
+        <div class="member-card reveal d3">
+          <img class="member-photo" src="https://web-osis-ebenhaezer.vercel.app/image/Anggota-humas-3.png" alt="Anggota Humas"/>
+          <div class="member-info"><div class="member-name">Greace Amelia</div><div class="member-role">Anggota — Humas</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panel 2425 -->
+
+</section>
+
+<hr class="divider"/>
+
+<!-- ============================================================
+     PROKER / EVENTS
+============================================================ -->
+<section id="events">
+  <div class="events-header">
+    <div>
+      <p class="section-tag reveal">Program Kerja</p>
+      <h2 class="section-title reveal d1">Proker &<br/><em>Event.</em></h2>
+    </div>
+    <div class="period-tabs reveal">
+      <button class="ptab active" onclick="switchTab('events','2526',this)">2025–2026</button>
+      <button class="ptab"        onclick="switchTab('events','2425',this)">2024–2025</button>
+    </div>
+  </div>
+
+  <!-- 2025-2026 -->
+  <div class="period-panel active" id="events-2526">
+    <div class="events-grid">
+      <!--
+        Cara tambah foto per event:
+        1. Upload foto ke repo di folder: images/events/2526/pensi/foto1.jpg dst
+        2. Di data-photos di bawah, isi URL foto dipisah koma
+        3. Kalau belum ada foto, biarkan data-photos="" — otomatis tampil placeholder
+      -->
+
+      <div class="event-card reveal" onclick="openEventModal(this)"
+        data-title="Pensi — Pentas Seni"
+        data-dept="DPD — Creativity"
+        data-desc="Panggung ekspresi seni dan bakat siswa-siswi SMAK3 Bina Bakti dalam satu malam yang spektakuler."
+        data-photos="">
+        <!-- ── GANTI background-image saat foto event tersedia ── -->
+        <div class="event-bg"></div>
+        <div class="event-body">
+          <div class="event-num">01</div>
+          <div class="event-title">Pensi — Pentas Seni</div>
+          <p class="event-desc">Panggung ekspresi seni dan bakat siswa-siswi SMAK3 Bina Bakti dalam satu malam yang spektakuler.</p>
+          <span class="event-badge">DPD — Creativity</span>
+          <div class="event-cta">Lihat Dokumentasi</div>
+        </div>
+      </div>
+
+      <div class="event-card reveal d1" onclick="openEventModal(this)"
+        data-title="Paskah"
+        data-dept="DPD — Spirituality"
+        data-desc="Peringatan Paskah bersama seluruh warga sekolah sebagai wujud iman dan kebersamaan."
+        data-photos="">
+        <div class="event-bg"></div>
+        <div class="event-body">
+          <div class="event-num">02</div>
+          <div class="event-title">Paskah</div>
+          <p class="event-desc">Peringatan Paskah bersama seluruh warga sekolah sebagai wujud iman dan kebersamaan.</p>
+          <span class="event-badge">DPD — Spirituality</span>
+          <div class="event-cta">Lihat Dokumentasi</div>
+        </div>
+      </div>
+
+      <div class="event-card reveal d2" onclick="openEventModal(this)"
+        data-title="OSIS Majas"
+        data-dept="Kominfo — Humas"
+        data-desc="Kisi-kisi PTS/PAS dari OSIS untuk membantu persiapan ujian seluruh siswa."
+        data-photos="">
+        <div class="event-bg"></div>
+        <div class="event-body">
+          <div class="event-num">03</div>
+          <div class="event-title">OSIS Majas</div>
+          <p class="event-desc">Kisi-kisi PTS/PAS dari OSIS untuk membantu persiapan ujian seluruh siswa.</p>
+          <span class="event-badge">Kominfo — Humas</span>
+          <div class="event-cta">Lihat Dokumentasi</div>
+        </div>
+      </div>
+
+      <div class="event-card reveal d3" onclick="openEventModal(this)"
+        data-title="Go Green"
+        data-dept="DPD — Art & Sport"
+        data-desc="Menanam pohon dan tanaman di lingkungan sekolah demi menciptakan sekolah yang hijau dan asri."
+        data-photos="">
+        <div class="event-bg"></div>
+        <div class="event-body">
+          <div class="event-num">04</div>
+          <div class="event-title">Go Green</div>
+          <p class="event-desc">Menanam pohon dan tanaman di lingkungan sekolah demi menciptakan sekolah yang hijau dan asri.</p>
+          <span class="event-badge">DPD — Art &amp; Sport</span>
+          <div class="event-cta">Lihat Dokumentasi</div>
+        </div>
+      </div>
+
+      <div class="event-card reveal" onclick="openEventModal(this)"
+        data-title="Charity"
+        data-dept="DPD — Spirituality"
+        data-desc="Kegiatan donasi dan kepedulian sosial untuk membantu masyarakat yang membutuhkan."
+        data-photos="">
+        <div class="event-bg"></div>
+        <div class="event-body">
+          <div class="event-num">05</div>
+          <div class="event-title">Charity</div>
+          <p class="event-desc">Kegiatan donasi dan kepedulian sosial untuk membantu masyarakat yang membutuhkan.</p>
+          <span class="event-badge">DPD — Spirituality</span>
+          <div class="event-cta">Lihat Dokumentasi</div>
+        </div>
+      </div>
+
+      <div class="event-card reveal d1" onclick="openEventModal(this)"
+        data-title="Chinese New Year"
+        data-dept="DPD — Creativity"
+        data-desc="Perayaan Tahun Baru Imlek bersama yang mencerminkan keberagaman budaya di sekolah."
+        data-photos="">
+        <div class="event-bg"></div>
+        <div class="event-body">
+          <div class="event-num">06</div>
+          <div class="event-title">Chinese New Year</div>
+          <p class="event-desc">Perayaan Tahun Baru Imlek bersama yang mencerminkan keberagaman budaya di sekolah.</p>
+          <span class="event-badge">DPD — Creativity</span>
+          <div class="event-cta">Lihat Dokumentasi</div>
+        </div>
+      </div>
+
+      <div class="event-card reveal d2" onclick="openEventModal(this)"
+        data-title="Binbak Radio"
+        data-dept="Kominfo — Blitz"
+        data-desc="Radio sekolah yang mengudara saat jam istirahat dengan hiburan, informasi, dan musik."
+        data-photos="">
+        <div class="event-bg"></div>
+        <div class="event-body">
+          <div class="event-num">07</div>
+          <div class="event-title">Binbak Radio</div>
+          <p class="event-desc">Radio sekolah yang mengudara saat jam istirahat dengan hiburan, informasi, dan musik.</p>
+          <span class="event-badge">Kominfo — Blitz</span>
+          <div class="event-cta">Lihat Dokumentasi</div>
+        </div>
+      </div>
+
+      <div class="event-card reveal d3" onclick="openEventModal(this)"
+        data-title="Talent Day"
+        data-dept="DPD — Creativity"
+        data-desc="Ajang kompetisi bakat layaknya got talent — satu panggung untuk semua siswa SMAK3 Bina Bakti."
+        data-photos="">
+        <div class="event-bg"></div>
+        <div class="event-body">
+          <div class="event-num">08</div>
+          <div class="event-title">Talent Day</div>
+          <p class="event-desc">Ajang kompetisi bakat layaknya got talent — satu panggung untuk semua siswa SMAK3 Bina Bakti.</p>
+          <span class="event-badge">DPD — Creativity</span>
+          <div class="event-cta">Lihat Dokumentasi</div>
+        </div>
+      </div>
+
+      <div class="event-card reveal" onclick="openEventModal(this)"
+        data-title="Natal"
+        data-dept="DPD — Spirituality"
+        data-desc="Perayaan Natal sekolah yang meriah sebagai penutup tahun ajaran yang penuh makna."
+        data-photos="">
+        <div class="event-bg"></div>
+        <div class="event-body">
+          <div class="event-num">09</div>
+          <div class="event-title">Natal</div>
+          <p class="event-desc">Perayaan Natal sekolah yang meriah sebagai penutup tahun ajaran yang penuh makna.</p>
+          <span class="event-badge">DPD — Spirituality</span>
+          <div class="event-cta">Lihat Dokumentasi</div>
+        </div>
+      </div>
+
+      <div class="event-card reveal d1" onclick="openEventModal(this)"
+        data-title="Porak / Perak"
+        data-dept="DPD — Art & Sport"
+        data-desc="Pekan Olahraga Antar Kelas dan Pesta Rakyat — kompetisi seru yang ditunggu-tunggu usai ujian."
+        data-photos="">
+        <div class="event-bg"></div>
+        <div class="event-body">
+          <div class="event-num">10</div>
+          <div class="event-title">Porak / Perak</div>
+          <p class="event-desc">Pekan Olahraga Antar Kelas dan Pesta Rakyat — kompetisi seru yang ditunggu-tunggu usai ujian.</p>
+          <span class="event-badge">DPD — Art &amp; Sport</span>
+          <div class="event-cta">Lihat Dokumentasi</div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /events 2526 -->
+
+  <!-- 2024-2025 -->
+  <div class="period-panel" id="events-2425">
+    <div class="events-grid">
+      <div class="event-card reveal" style="pointer-events:none;">
+        <div class="event-bg"></div>
+        <div class="event-body" style="text-align:center;padding:60px 20px;">
+          <div style="color:var(--gray);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;">
+            Data proker 2024–2025<br/>akan ditambahkan di sini
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- EVENT MODAL -->
+<div id="event-modal">
+  <button class="modal-close" onclick="closeEventModal()">✕</button>
+  <div class="modal-inner">
+    <p class="modal-tag" id="modal-dept"></p>
+    <h2 class="modal-title" id="modal-title"></h2>
+    <p class="modal-desc" id="modal-desc"></p>
+    <div class="modal-photos" id="modal-photos"></div>
+  </div>
+</div>
+
+<hr class="divider"/>
+
+<!-- ============================================================
+     GALLERY
+============================================================ -->
+<section id="gallery">
+  <div class="gallery-header">
+    <div>
+      <p class="section-tag reveal">Dokumentasi</p>
+      <h2 class="section-title reveal d1">Galeri<br/><em>Karya.</em></h2>
+    </div>
+    <div class="period-tabs reveal">
+      <button class="ptab active" onclick="switchTab('gallery','2526',this)">2025–2026</button>
+      <button class="ptab"        onclick="switchTab('gallery','2425',this)">2024–2025</button>
+    </div>
+  </div>
+
+  <div class="period-panel active" id="gallery-2526">
+    <div class="gallery-grid">
+      <!--
+        ── TAMBAH foto 2025-2026 di sini ──
+        <div class="gallery-item reveal" onclick="openLightbox(this)">
+          <img class="gallery-img" src="images/gallery/2526/foto1.jpg" alt="Deskripsi"/>
+          <div class="gallery-overlay"><span class="gallery-icon">⊕</span></div>
+        </div>
+      -->
+      <div class="gallery-placeholder reveal">Foto 2025–2026 belum tersedia</div>
+      <div class="gallery-placeholder reveal d1">Upload ke repo → images/gallery/2526/</div>
+      <div class="gallery-placeholder reveal d2">Lalu ganti src di sini</div>
+    </div>
+  </div>
+
+  <div class="period-panel" id="gallery-2425">
+    <div class="gallery-grid">
+      <div class="gallery-item reveal" onclick="openLightbox(this)">
+        <img class="gallery-img" src="https://web-osis-ebenhaezer.vercel.app/css/logo-osis-hero.png" alt="2024-2025"/>
+        <div class="gallery-overlay"><span class="gallery-icon">⊕</span></div>
+      </div>
+      <div class="gallery-item reveal d1" onclick="openLightbox(this)">
+        <img class="gallery-img" src="https://web-osis-ebenhaezer.vercel.app/css/pembina.jpeg" alt="Pembina"/>
+        <div class="gallery-overlay"><span class="gallery-icon">⊕</span></div>
+      </div>
+      <div class="gallery-item reveal d2" onclick="openLightbox(this)">
+        <img class="gallery-img" src="https://web-osis-ebenhaezer.vercel.app/image/1732109645027.png" alt="Ketua 2024-2025"/>
+        <div class="gallery-overlay"><span class="gallery-icon">⊕</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt=""/>
+</div>
+
+<hr class="divider"/>
+
+<!-- ============================================================
+     CONTACT
+============================================================ -->
+<section id="contact">
+  <div class="contact-left">
+    <p class="section-tag reveal">Hubungi Kami</p>
+    <div class="contact-big reveal d1">Get<br/>in<br/><em>Touch.</em></div>
+  </div>
+  <div class="contact-right">
+    <p class="contact-address reveal">
+      Komplek Industri, Jl. Taman Kopo Indah 1 No.5,<br/>
+      Sayati, Kec. Margahayu,<br/>
+      Kabupaten Bandung, Jawa Barat 40226
+    </p>
+    <div class="social-links">
+      <a class="social-link reveal" href="https://www.instagram.com/osisebenhaezer_" target="_blank">
+        <span class="social-platform">Instagram</span>
+        <span class="social-handle">@osisebenhaezer_</span>
+        <span class="social-arrow">↗</span>
+      </a>
+      <a class="social-link reveal d1" href="https://www.tiktok.com/@osisebenhaezer" target="_blank">
+        <span class="social-platform">TikTok</span>
+        <span class="social-handle">@osisebenhaezer</span>
+        <span class="social-arrow">↗</span>
+      </a>
+      <a class="social-link reveal d2" href="mailto:staff.ebenhaezer@gmail.com">
+        <span class="social-platform">Email</span>
+        <span class="social-handle">staff.ebenhaezer@gmail.com</span>
+        <span class="social-arrow">↗</span>
+      </a>
+      <a class="social-link reveal d3" href="https://www.youtube.com/@SMAK3BinaBaktiBandung" target="_blank">
+        <span class="social-platform">YouTube</span>
+        <span class="social-handle">SMAK3 Bina Bakti Bandung</span>
+        <span class="social-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">OSIS Ebenhaezer — SMAK3 Bina Bakti</div>
+  <!-- ── UPDATE tahun tiap ganti periode ── -->
+  <div class="footer-copy">© 2026 OSIS Ebenhaezer. Semua hak dilindungi.</div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+  /* LOADER */
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('loader').classList.add('done'), 1100);
+  });
+
+  /* NAVBAR */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* HAMBURGER */
+  const ham = document.getElementById('hamburger');
+  const mMenu = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');
+    mMenu.classList.toggle('open');
+  });
+  function closeMobile() {
+    ham.classList.remove('open');
+    mMenu.classList.remove('open');
+  }
+
+  /* SCROLL REVEAL */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: .07 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* PERIOD TAB SWITCHER */
+  function switchTab(prefix, panelId, btn) {
+    document.querySelectorAll('[id^="' + prefix + '-"]').forEach(p => p.classList.remove('active'));
+    btn.closest('.period-tabs').querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById(prefix + '-' + panelId);
+    target.classList.add('active');
+    btn.classList.add('active');
+    target.querySelectorAll('.reveal').forEach(el => {
+      el.classList.remove('visible');
+      setTimeout(() => el.classList.add('visible'), 60);
+    });
+  }
+
+  /* EVENT MODAL */
+  const eventModal = document.getElementById('event-modal');
+
+  function openEventModal(card) {
+    const title  = card.dataset.title;
+    const dept   = card.dataset.dept;
+    const desc   = card.dataset.desc;
+    const photos = card.dataset.photos ? card.dataset.photos.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-dept').textContent  = dept;
+    document.getElementById('modal-desc').textContent  = desc;
+
+    const grid = document.getElementById('modal-photos');
+    grid.innerHTML = '';
+
+    if (photos.length === 0) {
+      /* tampil 3 placeholder kalau belum ada foto */
+      for (let i = 0; i < 3; i++) {
+        const ph = document.createElement('div');
+        ph.className = 'modal-photo-placeholder';
+        ph.innerHTML = '<div class="ph-icon">📷</div><span>Foto akan ditambahkan<br/>upload ke repo lalu isi data-photos</span>';
+        grid.appendChild(ph);
+      }
+    } else {
+      photos.forEach(src => {
+        const wrap = document.createElement('div');
+        wrap.className = 'modal-photo';
+        wrap.onclick = () => openLightboxSrc(src);
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = title;
+        wrap.appendChild(img);
+        grid.appendChild(wrap);
+      });
+    }
+
+    eventModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeEventModal() {
+    eventModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  eventModal.addEventListener('click', e => {
+    if (e.target === eventModal) closeEventModal();
+  });
+
+  /* LIGHTBOX */
+  const lightbox    = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+
+  function openLightbox(item) {
+    openLightboxSrc(item.querySelector('img').src);
+  }
+  function openLightboxSrc(src) {
+    lightboxImg.src = src;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeLightbox(); closeEventModal(); }
+  });
+</script>
+</body>
+</html>
